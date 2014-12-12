@@ -1,30 +1,48 @@
-var fs = require('fs');
-var path = require('path');
-var sinon = require('sinon');
-var $ = require('jquery');
-
-var $body = $(document.body);
+var $fixtures = $('#fixtures');
 
 var setFixtures = function () {
-  _.each(arguments, function (content) {
-    $body.append(content);
-  });
+    _.each(arguments, function (content) {
+        $fixtures.append(content);
+    });
 };
 
 var clearFixtures = function () {
-  $body.empty();
+    $fixtures.empty();
 };
 
+var originalHash = window.location.hash;
+
+before(function() {
+            this.setFixtures = setFixtures;
+            this.clearFixtures = clearFixtures;
+});
+
 beforeEach(function () {
-  this.sinon = sinon.sandbox.create();
-  this.setFixtures   = setFixtures;
-  this.clearFixtures = clearFixtures;
+    this.sinon = sinon.sandbox.create();
+
+    /*
+     * This is the Agent secret sauce.
+     * We'll want to be able to run this before/after each unit test...
+     * but to do that, we'll need to be able to pass in a new Backbone,Marionette
+     * which means wrapping these libs in a factory that creates a new one.
+    */
+
+    delete window.patchedBackbone;
+    delete window.patchedMarionette;
+    delete window._knownTypes;
+    window.Backbone = window.BackboneFactory();
+    window.Marionette = window.MarionetteFactory(Backbone);
+    window.patchBackbone(Backbone);
+    window.patchMarionette(Backbone, Marionette);
+
+    window.knownTypes();
+
 });
 
 afterEach(function () {
-  this.sinon.restore();
-  clearFixtures();
-  window.location.hash = '';
-  Backbone.history.stop();
-  Backbone.history.handlers.length = 0;
+    this.sinon.restore();
+    this.clearFixtures();
+    window.location.hash = originalHash;
+    Backbone.history.stop();
+    Backbone.history.handlers.length = 0;
 });

@@ -56,7 +56,7 @@ module.exports = function(grunt) {
     mochaTest: {
       tests: {
         options: {
-          require: './test/unit/setup/node.js',
+          require: './extension/js/test/unit/setup/node.js',
           reporter: 'nyan',
           clearRequireCache: true,
           mocha: require('mocha')
