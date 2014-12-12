@@ -1,5 +1,7 @@
 module.exports = function(grunt) {
 
+  require('load-grunt-tasks')(grunt);
+
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
@@ -18,6 +20,29 @@ module.exports = function(grunt) {
       }
     },
 
+    copy: {
+      main: {
+        expand: true,
+        cwd: 'extension/js/agent/build/src/',
+        src: '*',
+        dest: 'test/src/',
+        flatten: true
+      }
+    },
+
+    env: {
+      coverage: {
+        APP_DIR_FOR_CODE_COVERAGE: '../../../../test/src/'
+      }
+    },
+
+    instrument: {
+      files: 'test/src/*.js',
+      options: {
+        basePath: './'
+      }
+    },
+
     mocha: {
       test: {
         options: {
@@ -26,6 +51,30 @@ module.exports = function(grunt) {
         src: ['extension/js/test/unit/AgentSpecRunner.html'],
         dest: './test/output/xunit.out',
       },
+    },
+
+    storeCoverage: {
+      options: {
+        dir: './coverage'
+      }
+    },
+    makeReport: {
+      src: 'coverage/**/*.json',
+      options: {
+        type: 'lcov',
+        dir: 'coverage',
+        print: 'detail'
+      }
+    },
+
+    coveralls: {
+      options: {
+        src: 'coverage/lcov.info',
+        force: false
+      },
+      default: {
+        src: 'coverage/lcov.info'
+      }
     },
 
     sass: {
@@ -51,18 +100,14 @@ module.exports = function(grunt) {
 
   });
 
-  grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-preprocess');
-  grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-mocha');
-  grunt.loadNpmTasks('grunt-contrib-sass');
-
 
   grunt.registerTask('agent', ['preprocess']);
 
   grunt.registerTask('build', ['agent', 'sass']);
 
-  grunt.registerTask('test', ['agent', 'mocha']);
+  grunt.registerTask('test', ['agent', 'copy', 'mocha']);
+
+  grunt.registerTask('coverage', ['agent', 'copy', 'env:coverage', 'instrument', 'mocha', 'storeCoverage', 'makeReport']);
 
   grunt.registerTask('default', ['watch']);
 
