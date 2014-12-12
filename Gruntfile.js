@@ -32,7 +32,7 @@ module.exports = function(grunt) {
 
     env: {
       coverage: {
-        APP_DIR_FOR_CODE_COVERAGE: '../../../../test/src/'
+        APP_DIR_FOR_CODE_COVERAGE: '../../../test/src/'
       }
     },
 
@@ -51,6 +51,21 @@ module.exports = function(grunt) {
         src: ['extension/js/test/unit/AgentSpecRunner.html'],
         dest: './test/output/xunit.out',
       },
+    },
+
+    mochaTest: {
+      tests: {
+        options: {
+          require: './test/unit/setup/node.js',
+          reporter: 'nyan',
+          clearRequireCache: true,
+          mocha: require('mocha')
+        },
+        src: [
+          './extension/js/test/unit/helpers.js',
+          './extension/js/test/unit/**/*.spec.js'
+        ]
+      }
     },
 
     storeCoverage: {
@@ -107,7 +122,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('test', ['agent', 'copy', 'mocha']);
 
-  grunt.registerTask('coverage', ['agent', 'copy', 'env:coverage', 'instrument', 'mocha', 'storeCoverage', 'makeReport']);
+  grunt.registerTask('coverage', ['agent', 'copy', 'env:coverage', 'instrument', 'mochaTest', 'storeCoverage', 'makeReport']);
 
   grunt.registerTask('default', ['watch']);
 
