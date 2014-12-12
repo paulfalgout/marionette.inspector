@@ -32,7 +32,7 @@ module.exports = function(grunt) {
 
     env: {
       coverage: {
-        APP_DIR_FOR_CODE_COVERAGE: '../../../test/src/'
+        APP_DIR_FOR_CODE_COVERAGE: '../../../../../test/src/'
       }
     },
 
@@ -62,7 +62,7 @@ module.exports = function(grunt) {
           mocha: require('mocha')
         },
         src: [
-          './extension/js/test/unit/helpers.js',
+          './extension/js/test/unit/setup/helpers.js',
           './extension/js/test/unit/**/*.spec.js'
         ]
       }
