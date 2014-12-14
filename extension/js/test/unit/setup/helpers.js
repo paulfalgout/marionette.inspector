@@ -13,8 +13,8 @@ var clearFixtures = function () {
 var originalHash = window.location.hash;
 
 before(function() {
-            this.setFixtures = setFixtures;
-            this.clearFixtures = clearFixtures;
+    this.setFixtures = setFixtures;
+    this.clearFixtures = clearFixtures;
 });
 
 beforeEach(function () {
@@ -26,11 +26,12 @@ beforeEach(function () {
      * but to do that, we'll need to be able to pass in a new Backbone,Marionette
      * which means wrapping these libs in a factory that creates a new one.
     */
-
+return;
     delete window.patchedBackbone;
     delete window.patchedMarionette;
     delete window._knownTypes;
-    window.Backbone = window.BackboneFactory();
+    this._ = _;
+    window.Backbone = root.BackboneFactory();
     window.Marionette = window.MarionetteFactory(Backbone);
     window.patchBackbone(Backbone);
     window.patchMarionette(Backbone, Marionette);

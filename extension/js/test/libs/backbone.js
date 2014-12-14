@@ -5,7 +5,7 @@
 
 (function(root, factory) {
 
-  root.BackboneFactory = root._.partial(factory, root, {}, window._, root.jQuery || root.$);
+  root.BackboneFactory = root._.partial(factory, root, {}, root._, root.jQuery || root.$);
 
 }(window, function(root, Backbone, _, $) {
 

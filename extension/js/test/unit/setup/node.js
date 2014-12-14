@@ -23,20 +23,14 @@ if (!global.document || !global.window) {
   global.window = document.createWindow();
   global.navigator = global.window.navigator;
 
-  global.window.Node.prototype.contains = function (node) {
-    return this.compareDocumentPosition(node) & 16;
-  };
 }
 
 
-global.$ = global.jQuery = require('jquery');
-global._ = require('underscore');
-global.Backbone = require('backbone');
-global.Backbone.$ = global.$;
-global.Marionette = Backbone.Marionette = {};
-require('backbone.wreqr');
-require('backbone.babysitter');
-global.slice = Array.prototype.slice;
-Marionette.Deferred = global.Backbone.$.Deferred;
+window.$ = global.$ = global.jQuery = require('jquery');
+window._ = global._ = require('underscore');
+
+require('../../libs/backbone');
+require('../../libs/marionette');
+
 requireHelper('core');
 
