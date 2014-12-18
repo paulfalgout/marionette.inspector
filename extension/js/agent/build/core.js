@@ -13,17 +13,33 @@ if (typeof window.$ == "undefined") {
 // add jQuery to window.__agent because Backbone requires it on the root
 this.$ = window.$;
 
+
 // @include ../../lib/underscore-contrib.js
 
-
-// @include ../../lib/backbone-no-amd.js
-// @include ../../lib/backbone.radio.js
-// @include ../../lib/marionette.js
-
 // define Backbone and Marionette locally in the agent closure
-var Backbone = this.Backbone;
-var Marionette = this.Marionette;
 
+//factory wrapper is useful for regenerating an unpatched Backbone
+this.BackboneFactory = function(){
+// @include ../../lib/backbone.js
+    return this.Backbone.noConflict();
+};
+var Backbone = this.Backbone = this.BackboneFactory();
+
+// @include ../../lib/backbone.radio.js
+
+
+//factory wrapper is useful for regenerating an unpatched Marionette
+this.MarionetteFactory = function(Backbone){
+    var prevBackbone = this.Backbone;
+    if(Backbone){
+        this.Backbone = Backbone;
+    }
+// @include ../../lib/backbone.marionette.js
+
+    this.Backbone = prevBackbone;
+    return this.Marionette.noConflict();
+};
+var Marionette = this.Marionette = this.MarionetteFactory(Backbone);
 
 
  /*

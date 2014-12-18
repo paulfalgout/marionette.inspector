@@ -9,7 +9,7 @@ require.config({
         underscore: '../lib/underscore',
         backbone: '../lib/backbone',
         radio: '../lib/backbone.radio',
-        marionette: '../lib/marionette',
+        marionette: '../lib/backbone.marionette',
         text: '../lib/text',
         bootstrap: '../lib/bootstrap.min',
         handlebars: '../lib/handlebars',
