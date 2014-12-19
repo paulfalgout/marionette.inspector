@@ -2,8 +2,7 @@
 if (typeof window._ == "undefined") {
   // @include ../../lib/underscore.js
 }
-var _ = this._;
-
+this._ = window._;
 
 // add jQuery if it's not there
 if (typeof window.$ == "undefined") {
@@ -13,33 +12,30 @@ if (typeof window.$ == "undefined") {
 // add jQuery to window.__agent because Backbone requires it on the root
 this.$ = window.$;
 
-
 // @include ../../lib/underscore-contrib.js
 
 // define Backbone and Marionette locally in the agent closure
 
 //factory wrapper is useful for regenerating an unpatched Backbone
-this.BackboneFactory = function(){
-// @include ../../lib/backbone.js
-    return this.Backbone.noConflict();
+window.BackboneFactory = function() {
+
+  // @include ../../lib/backbone.js
+
+  return Backbone.noConflict();
 };
-var Backbone = this.Backbone = this.BackboneFactory();
+window.Backbone = window.BackboneFactory();
 
 // @include ../../lib/backbone.radio.js
 
 
 //factory wrapper is useful for regenerating an unpatched Marionette
-this.MarionetteFactory = function(Backbone){
-    var prevBackbone = this.Backbone;
-    if(Backbone){
-        this.Backbone = Backbone;
-    }
-// @include ../../lib/backbone.marionette.js
+window.MarionetteFactory = function(Backbone) {
 
-    this.Backbone = prevBackbone;
-    return this.Marionette.noConflict();
+  // @include ../../lib/backbone.marionette.js
+
+  return this.Marionette.noConflict();
 };
-var Marionette = this.Marionette = this.MarionetteFactory(Backbone);
+window.Marionette = window.MarionetteFactory(window.Backbone);
 
 
  /*

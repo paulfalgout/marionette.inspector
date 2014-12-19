@@ -1,5 +1,7 @@
 module.exports = function(grunt) {
 
+  require('load-grunt-tasks')(grunt);
+
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
@@ -28,6 +30,21 @@ module.exports = function(grunt) {
       },
     },
 
+    mochaTest: {
+      tests: {
+        options: {
+          require: './extension/js/test/unit/setup/node.js',
+          reporter: grunt.option('mocha-reporter') || 'nyan',
+          clearRequireCache: true,
+          mocha: require('mocha')
+        },
+        src: [
+          './extension/js/test/unit/setup/helpers.js',
+          './extension/js/test/unit/**/*.spec.js'
+        ]
+      }
+    },
+
     sass: {
       dist: {
         options: {
@@ -50,12 +67,6 @@ module.exports = function(grunt) {
     },
 
   });
-
-  grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-preprocess');
-  grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-mocha');
-  grunt.loadNpmTasks('grunt-contrib-sass');
 
 
   grunt.registerTask('agent', ['preprocess']);
